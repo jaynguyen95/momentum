@@ -7,6 +7,7 @@ export interface Habit {
   target_count: number;
   color: string;
   icon?: string;
+  category_id?: number;
   created_at: string;
   updated_at: string;
 }
@@ -24,11 +25,35 @@ export interface Streak {
   longest_streak: number;
 }
 
+export interface Category {
+  id: number;
+  user_id: number;
+  name: string;
+  color: string;
+  icon?: string;
+  created_at: string;
+}
+
+export interface DailyGoal {
+  id: number;
+  user_id: number;
+  target_completions: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface CreateHabitInput {
   name: string;
   description?: string;
   frequency?: string;
   target_count?: number;
+  color?: string;
+  icon?: string;
+  category_id?: number;
+}
+
+export interface CreateCategoryInput {
+  name: string;
   color?: string;
   icon?: string;
 }

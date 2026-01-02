@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { habitService } from '../services/habitService';
-import type { CreateHabitInput } from '../types/habit';
 import type { Habit } from '../types/habit';
+import type { CreateHabitInput } from '../types/habit';
+import toast from 'react-hot-toast';
 import '../styles/EditHabitModal.css';
 
 interface EditHabitModalProps {
@@ -25,7 +26,7 @@ const EditHabitModal: React.FC<EditHabitModalProps> = ({ habit, onClose, onHabit
     e.preventDefault();
     
     if (!formData.name?.trim()) {
-      alert('Habit name is required');
+      toast.error('Habit name is required');
       return;
     }
 
@@ -34,8 +35,9 @@ const EditHabitModal: React.FC<EditHabitModalProps> = ({ habit, onClose, onHabit
       await habitService.updateHabit(habit.id, formData);
       onHabitUpdated();
       onClose();
+      toast.success('Habit updated! ✨');
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to update habit');
+      toast.error(err.response?.data?.error || 'Failed to update habit');
     } finally {
       setLoading(false);
     }

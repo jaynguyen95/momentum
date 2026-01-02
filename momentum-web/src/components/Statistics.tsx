@@ -3,6 +3,7 @@ import { habitService } from '../services/habitService';
 import type { Habit, Completion, Streak } from '../types/habit';
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, format } from 'date-fns';
 import '../styles/Statistics.css';
+import EmptyState from './EmptyState';
 
 const Statistics: React.FC = () => {
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -150,7 +151,11 @@ const Statistics: React.FC = () => {
       <div className="top-habits-section">
         <h3>Top Performing Habits</h3>
         {topHabits.length === 0 ? (
-          <p className="no-data">No data yet. Start completing habits!</p>
+          <EmptyState
+            icon="📊"
+            title="No data yet"
+            description="Start completing habits to see your statistics and track your progress!"
+          />
         ) : (
           <div className="top-habits-list">
             {topHabits.map((item, index) => (

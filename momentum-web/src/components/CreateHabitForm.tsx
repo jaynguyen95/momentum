@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { habitService } from '../services/habitService';
 import type { CreateHabitInput } from '../types/habit';
+import type { Category } from '../types/habit';
+import toast from 'react-hot-toast';
 import '../styles/CreateHabitForm.css';
 
 interface CreateHabitFormProps {
@@ -9,20 +11,37 @@ interface CreateHabitFormProps {
 
 const CreateHabitForm: React.FC<CreateHabitFormProps> = ({ onHabitCreated }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [formData, setFormData] = useState<CreateHabitInput>({
     name: '',
     description: '',
     frequency: 'daily',
     target_count: 1,
-    color: '#3b82f6'
+    color: '#3b82f6',
+    category_id: undefined
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchCategories();
+    }
+  }, [isOpen]);
+
+  const fetchCategories = async () => {
+    try {
+      const data = await habitService.getCategories();
+      setCategories(data);
+    } catch (err: any) {
+      console.error('Failed to fetch categories:', err);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name.trim()) {
-      alert('Habit name is required');
+      toast.error('Habit name is required');
       return;
     }
 
@@ -34,26 +53,22 @@ const CreateHabitForm: React.FC<CreateHabitFormProps> = ({ onHabitCreated }) => 
         description: '',
         frequency: 'daily',
         target_count: 1,
-        color: '#3b82f6'
+        color: '#3b82f6',
+        category_id: undefined
       });
       setIsOpen(false);
       onHabitCreated();
+      toast.success('Habit created! 🎉');
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to create habit');
+      toast.error(err.response?.data?.error || 'Failed to create habit');
     } finally {
       setLoading(false);
     }
   };
 
   const colors = [
-    '#3b82f6', // blue
-    '#10b981', // green
-    '#f59e0b', // amber
-    '#ef4444', // red
-    '#8b5cf6', // purple
-    '#ec4899', // pink
-    '#06b6d4', // cyan
-    '#f97316'  // orange
+    '#3b82f6', '#10b981', '#f59e0b', '#ef4444',
+    '#8b5cf6', '#ec4899', '#06b6d4', '#f97316'
   ];
 
   return (
@@ -99,6 +114,25 @@ const CreateHabitForm: React.FC<CreateHabitFormProps> = ({ onHabitCreated }) => 
                 placeholder="What does this habit involve?"
                 rows={3}
               />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="category">Category (Optional)</label>
+              <select
+                id="category"
+                value={formData.category_id || ''}
+                onChange={(e) => setFormData({ 
+                  ...formData, 
+                  category_id: e.target.value ? parseInt(e.target.value) : undefined 
+                })}
+              >
+                <option value="">No category</option>
+                {categories.map(cat => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.icon} {cat.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="form-row">

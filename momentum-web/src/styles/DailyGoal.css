@@ -1,0 +1,155 @@
+.daily-goal-widget {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px var(--shadow);
+  margin-bottom: 24px;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.daily-goal-widget.complete {
+  border-color: #48bb78;
+  background: linear-gradient(135deg, rgba(72, 187, 120, 0.1) 0%, var(--bg-secondary) 100%);
+}
+
+.daily-goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.daily-goal-header h3 {
+  font-size: 18px;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.btn-edit-goal {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.btn-edit-goal:hover {
+  color: #667eea;
+}
+
+.goal-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.goal-edit label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.goal-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.goal-input-group input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.btn-save,
+.btn-cancel {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-save {
+  background: #48bb78;
+  color: white;
+}
+
+.btn-save:hover {
+  background: #38a169;
+}
+
+.btn-cancel {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.btn-cancel:hover {
+  background: var(--border-color);
+}
+
+.goal-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.goal-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.goal-current {
+  font-size: 36px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.goal-separator {
+  font-size: 24px;
+  color: var(--text-tertiary);
+}
+
+.goal-target {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.goal-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+
+.progress-bar {
+  height: 12px;
+  background: var(--bg-tertiary);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.5s ease;
+  border-radius: 6px;
+}
+
+.goal-celebration {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(72, 187, 120, 0.1);
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 600;
+  color: #38a169;
+}

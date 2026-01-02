@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { habitService } from '../services/habitService';
-import type { Habit, Completion, Streak } from '../types/habit';
+import type { Habit, Completion, Streak, Category } from '../types/habit';
 import CreateHabitForm from './CreateHabitForm';
 import EditHabitModal from './EditHabitModal';
 import HabitCalendar from './HabitCalendar';
+import DailyGoal from './DailyGoal';
+import CategoryManager from './CategoryManager';
+import EmptyState from './EmptyState';
+import toast from 'react-hot-toast';
 import '../styles/HabitList.css';
 
 const HabitList: React.FC = () => {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [completions, setCompletions] = useState<Completion[]>([]);
   const [streaks, setStreaks] = useState<Map<number, Streak>>(new Map());
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
@@ -17,6 +23,7 @@ const HabitList: React.FC = () => {
 
   useEffect(() => {
     fetchHabits();
+    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -74,6 +81,15 @@ const HabitList: React.FC = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const data = await habitService.getCategories();
+      setCategories(data);
+    } catch (err: any) {
+      console.error('Failed to fetch categories:', err);
+    }
+  };
+
   const isHabitCompletedToday = (habitId: number): boolean => {
     return completions.some(c => c.habit_id === habitId);
   };
@@ -89,8 +105,21 @@ const HabitList: React.FC = () => {
       await habitService.completeHabit(habitId);
       await fetchTodayCompletions();
       await fetchStreaks();
+      
+      const habit = habits.find(h => h.id === habitId);
+      const streak = streaks.get(habitId);
+      
+      if (streak && streak.current_streak > 0) {
+        toast.success(`🔥 ${streak.current_streak + 1} day streak!`, {
+          icon: '✅',
+        });
+      } else {
+        toast.success('Habit completed!', {
+          icon: '✅',
+        });
+      }
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to complete habit');
+      toast.error(err.response?.data?.error || 'Failed to complete habit');
     }
   };
 
@@ -99,8 +128,11 @@ const HabitList: React.FC = () => {
       await habitService.undoTodayCompletion(habitId);
       await fetchTodayCompletions();
       await fetchStreaks();
+      toast.success('Completion removed', {
+        icon: '↶',
+      });
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to undo completion');
+      toast.error(err.response?.data?.error || 'Failed to undo completion');
     }
   };
 
@@ -111,17 +143,28 @@ const HabitList: React.FC = () => {
     try {
       await habitService.deleteHabit(habitId);
       setHabits(habits.filter(h => h.id !== habitId));
+      toast.success('Habit deleted');
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to delete habit');
+      toast.error(err.response?.data?.error || 'Failed to delete habit');
     }
   };
 
-  const sortedHabits = [...habits].sort((a, b) => {
+  const getCategoryForHabit = (habitCategoryId?: number): Category | undefined => {
+    return categories.find(c => c.id === habitCategoryId);
+  };
+
+  const filteredHabits = selectedCategory
+    ? habits.filter(h => h.category_id === selectedCategory)
+    : habits;
+
+  const sortedHabits = [...filteredHabits].sort((a, b) => {
     const aCompleted = isHabitCompletedToday(a.id);
     const bCompleted = isHabitCompletedToday(b.id);
     if (aCompleted === bCompleted) return 0;
     return aCompleted ? 1 : -1;
   });
+
+  const completedToday = completions.length;
 
   if (loading) return <div className="loading">Loading habits...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -130,16 +173,52 @@ const HabitList: React.FC = () => {
     <div className="habit-list">
       <h2>Your Habits</h2>
       
+      <DailyGoal completedToday={completedToday} />
+      
+      <CategoryManager />
+      
+      {categories.length > 0 && (
+        <div className="category-filter">
+          <button
+            className={`filter-btn ${selectedCategory === null ? 'active' : ''}`}
+            onClick={() => setSelectedCategory(null)}
+          >
+            All
+          </button>
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              className={`filter-btn ${selectedCategory === cat.id ? 'active' : ''}`}
+              style={{ 
+                borderColor: selectedCategory === cat.id ? cat.color : 'transparent',
+                color: selectedCategory === cat.id ? cat.color : 'inherit'
+              }}
+              onClick={() => setSelectedCategory(cat.id)}
+            >
+              {cat.icon} {cat.name}
+            </button>
+          ))}
+        </div>
+      )}
+      
       <CreateHabitForm onHabitCreated={fetchHabits} />
 
-      {habits.length === 0 ? (
-        <p className="no-habits">No habits yet. Create your first one!</p>
+      {filteredHabits.length === 0 ? (
+        <EmptyState
+          icon="🎯"
+          title={selectedCategory ? "No habits in this category" : "No habits yet"}
+          description={selectedCategory 
+            ? "Create a habit and assign it to this category!" 
+            : "Create your first habit to start building better routines and tracking your progress!"
+          }
+        />
       ) : (
         <div className="habits-grid">
           {sortedHabits.map(habit => {
             const isCompleted = isHabitCompletedToday(habit.id);
             const streak = streaks.get(habit.id);
             const showReminder = shouldShowStreakReminder();
+            const category = getCategoryForHabit(habit.category_id);
             
             return (
               <div 
@@ -148,9 +227,19 @@ const HabitList: React.FC = () => {
                 style={{ borderLeft: `4px solid ${habit.color}` }}
               >
                 <div className="habit-header">
-                  <h3 onClick={() => setCalendarHabit(habit)} style={{ cursor: 'pointer' }}>
-                    {habit.name} 📅
-                  </h3>
+                  <div className="habit-title-group">
+                    <h3 onClick={() => setCalendarHabit(habit)} style={{ cursor: 'pointer' }}>
+                      {habit.name} 📅
+                    </h3>
+                    {category && (
+                      <span 
+                        className="habit-category-badge"
+                        style={{ backgroundColor: `${category.color}20`, color: category.color }}
+                      >
+                        {category.icon} {category.name}
+                      </span>
+                    )}
+                  </div>
                   <div className="habit-meta">
                     {streak && streak.current_streak > 0 && (
                       <span className="habit-streak">

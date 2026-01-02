@@ -6,9 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import HabitList from '../components/HabitList';
 import Statistics from '../components/Statistics';
 import '../styles/Dashboard.css';
+import { useTheme } from '../context/ThemeContext';
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'habits' | 'stats'>('habits');
 
@@ -22,6 +24,13 @@ const Dashboard: React.FC = () => {
       <nav className="dashboard-nav">
         <h2>Momentum</h2>
         <div className="nav-user">
+          <button 
+            onClick={toggleTheme} 
+            className="btn-theme"
+            aria-label="Toggle theme"
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
           <span>Welcome, {user?.name}!</span>
           <button onClick={handleLogout} className="btn-secondary">
             Logout

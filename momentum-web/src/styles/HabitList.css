@@ -28,10 +28,11 @@
 }
 
 .habit-card {
-  background: white;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  box-shadow: 0 2px 4px var(--shadow);
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
 }
 
@@ -63,7 +64,7 @@
 
 .habit-header h3 {
   font-size: 18px;
-  color: #333;
+  color: var(--text-primary);
   margin: 0;
   transition: all 0.3s;
   flex: 1;
@@ -97,7 +98,7 @@
 }
 
 .habit-description {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
   margin: 10px 0;
   line-height: 1.5;
@@ -183,4 +184,50 @@
 
 .btn-complete:disabled {
   cursor: not-allowed;
+}
+
+.category-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+.filter-btn.active {
+  border-width: 2px;
+  background: var(--bg-tertiary);
+}
+
+.habit-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.habit-category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  width: fit-content;
 }

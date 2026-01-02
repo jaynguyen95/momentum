@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Habit, Completion, Streak, CreateHabitInput } from '../types/habit';
+import type { Habit, Completion, Streak, CreateHabitInput, Category, CreateCategoryInput, DailyGoal } from '../types/habit';
 
 const API_URL = 'http://localhost:3001/api';
 
@@ -81,6 +81,50 @@ export const habitService = {
   getStreak: async (habitId: number): Promise<Streak> => {
     const response = await axios.get(
       `${API_URL}/habits/${habitId}/streak`,
+      { headers: getAuthHeader() }
+    );
+    return response.data;
+  },
+
+  // Categories
+  getCategories: async (): Promise<Category[]> => {
+    const response = await axios.get(`${API_URL}/categories`, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  },
+
+  createCategory: async (category: CreateCategoryInput): Promise<Category> => {
+    const response = await axios.post(`${API_URL}/categories`, category, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  },
+
+  updateCategory: async (id: number, category: Partial<CreateCategoryInput>): Promise<Category> => {
+    const response = await axios.put(`${API_URL}/categories/${id}`, category, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  },
+
+  deleteCategory: async (id: number): Promise<void> => {
+    await axios.delete(`${API_URL}/categories/${id}`, {
+      headers: getAuthHeader()
+    });
+  },
+
+  // Daily Goals
+  getDailyGoal: async (): Promise<DailyGoal> => {
+    const response = await axios.get(`${API_URL}/goals`, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  },
+
+  updateDailyGoal: async (targetCompletions: number): Promise<DailyGoal> => {
+    const response = await axios.put(`${API_URL}/goals`, 
+      { target_completions: targetCompletions },
       { headers: getAuthHeader() }
     );
     return response.data;

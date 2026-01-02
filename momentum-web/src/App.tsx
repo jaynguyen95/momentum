@@ -1,8 +1,7 @@
-// FILE: momentum-web/src/App.tsx
-
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
+import { Toaster } from 'react-hot-toast';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
@@ -34,71 +33,51 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   return <>{children}</>;
 };
 
-// Public Route component (redirect if logged in)
-const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        fontSize: '18px',
-        color: '#667eea'
-      }}>
-        Loading...
-      </div>
-    );
-  }
-
-  if (user) {
-    return <Navigate to="/dashboard" />;
-  }
-
-  return <>{children}</>;
-};
-
-function AppRoutes() {
-  return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" />} />
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/signup"
-        element={
-          <PublicRoute>
-            <Signup />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  );
-}
-
 function App() {
   return (
-    <BrowserRouter>
+    <ThemeProvider>
       <AuthProvider>
-        <AppRoutes />
+        <Router>
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: 'var(--toast-bg)',
+                color: 'var(--toast-text)',
+                padding: '16px',
+                borderRadius: '8px',
+              },
+              success: {
+                iconTheme: {
+                  primary: '#48bb78',
+                  secondary: '#fff',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#f56565',
+                  secondary: '#fff',
+                },
+              },
+            }}
+          />
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </Router>
       </AuthProvider>
-    </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
