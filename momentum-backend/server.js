@@ -31,7 +31,9 @@ pool.query('SELECT NOW()', (err, res) => {
 
 // Import routes
 const initAuthRoutes = require('./routes/auth');
-const initHabitsRoutes = require('./routes/habits');
+const habitsRouter = require('./routes/habits');
+const categoriesRouter = require('./routes/categories');
+const goalsRouter = require('./routes/goals');
 
 // Routes
 app.get('/', (req, res) => {
@@ -44,7 +46,9 @@ app.get('/api/health', (req, res) => {
 
 // Auth routes
 app.use('/api/auth', initAuthRoutes(pool));
-app.use('/api/habits', initHabitsRoutes(pool));
+app.use('/api/habits', habitsRouter(pool));
+app.use('/api/categories', categoriesRouter(pool));
+app.use('/api/goals', goalsRouter(pool));
 
 // Start server
 app.listen(PORT, () => {

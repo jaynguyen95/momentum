@@ -91,6 +91,32 @@ module.exports = (pool) => {
     }
   });
 
+  // Undo today's completion
+  router.delete('/:id/complete-today', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      
+      const result = await pool.query(
+        `DELETE FROM completions 
+         WHERE habit_id = $1 AND user_id = $2 
+         AND DATE(completed_date) = $3
+         RETURNING *`,
+        [id, req.user.id, today]
+      );
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'No completion found for today' });
+      }
+      
+      res.json({ message: 'Completion removed' });
+    } catch (error) {
+      console.error('Undo completion error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Get habit logs for a date range
   router.get('/:id/logs', authenticateToken, async (req, res) => {
     const { id } = req.params;
