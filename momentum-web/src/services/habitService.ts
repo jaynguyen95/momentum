@@ -70,6 +70,13 @@ export const habitService = {
     });
   },
 
+  // Undo today's completion
+  undoTodayCompletion: async (habitId: number): Promise<void> => {
+    await axios.delete(`${API_URL}/habits/${habitId}/complete-today`, {
+      headers: getAuthHeader()
+    });
+  },
+
   // Get habit streak
   getStreak: async (habitId: number): Promise<Streak> => {
     const response = await axios.get(

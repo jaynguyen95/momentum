@@ -1,0 +1,124 @@
+.calendar-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.calendar-title h3 {
+  font-size: 24px;
+  margin: 0 0 8px 0;
+}
+
+.completion-rate {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.calendar-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.calendar-navigation button {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.calendar-navigation button:hover {
+  background: #f3f4f6;
+  border-color: #999;
+}
+
+.calendar-navigation h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.calendar-loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: #666;
+  padding: 8px;
+  text-transform: uppercase;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.2s;
+  cursor: default;
+}
+
+.calendar-day.other-month {
+  color: #d1d5db;
+  background: #fafafa;
+}
+
+.calendar-day.today {
+  border-color: #667eea;
+  font-weight: 700;
+}
+
+.calendar-day.completed {
+  color: white;
+  border-color: transparent;
+}
+
+.calendar-day.completed .check-mark {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 10px;
+}
+
+.calendar-day:hover:not(.other-month) {
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

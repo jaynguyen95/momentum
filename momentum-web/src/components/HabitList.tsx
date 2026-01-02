@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { habitService } from '../services/habitService';
 import type { Habit, Completion, Streak } from '../types/habit';
 import CreateHabitForm from './CreateHabitForm';
+import EditHabitModal from './EditHabitModal';
+import HabitCalendar from './HabitCalendar';
 import '../styles/HabitList.css';
 
 const HabitList: React.FC = () => {
@@ -10,6 +12,8 @@ const HabitList: React.FC = () => {
   const [streaks, setStreaks] = useState<Map<number, Streak>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
+  const [calendarHabit, setCalendarHabit] = useState<Habit | null>(null);
 
   useEffect(() => {
     fetchHabits();
@@ -90,6 +94,16 @@ const HabitList: React.FC = () => {
     }
   };
 
+  const handleUndoCompletion = async (habitId: number) => {
+    try {
+      await habitService.undoTodayCompletion(habitId);
+      await fetchTodayCompletions();
+      await fetchStreaks();
+    } catch (err: any) {
+      alert(err.response?.data?.error || 'Failed to undo completion');
+    }
+  };
+
   const handleDeleteHabit = async (habitId: number) => {
     if (!window.confirm('Are you sure you want to delete this habit?')) {
       return;
@@ -134,7 +148,9 @@ const HabitList: React.FC = () => {
                 style={{ borderLeft: `4px solid ${habit.color}` }}
               >
                 <div className="habit-header">
-                  <h3>{habit.name}</h3>
+                  <h3 onClick={() => setCalendarHabit(habit)} style={{ cursor: 'pointer' }}>
+                    {habit.name} 📅
+                  </h3>
                   <div className="habit-meta">
                     {streak && streak.current_streak > 0 && (
                       <span className="habit-streak">
@@ -155,12 +171,26 @@ const HabitList: React.FC = () => {
                 )}
                 
                 <div className="habit-actions">
+                  {isCompleted ? (
+                    <button 
+                      className="btn-undo"
+                      onClick={() => handleUndoCompletion(habit.id)}
+                    >
+                      ↶ Undo
+                    </button>
+                  ) : (
+                    <button 
+                      className="btn-complete"
+                      onClick={() => handleCompleteHabit(habit.id)}
+                    >
+                      ✓ Complete
+                    </button>
+                  )}
                   <button 
-                    className={`btn-complete ${isCompleted ? 'completed' : ''}`}
-                    onClick={() => handleCompleteHabit(habit.id)}
-                    disabled={isCompleted}
+                    className="btn-edit"
+                    onClick={() => setEditingHabit(habit)}
                   >
-                    {isCompleted ? '✓ Completed' : '✓ Complete'}
+                    ✎ Edit
                   </button>
                   <button 
                     className="btn-delete"
@@ -173,6 +203,21 @@ const HabitList: React.FC = () => {
             );
           })}
         </div>
+      )}
+
+      {editingHabit && (
+        <EditHabitModal
+          habit={editingHabit}
+          onClose={() => setEditingHabit(null)}
+          onHabitUpdated={fetchHabits}
+        />
+      )}
+
+      {calendarHabit && (
+        <HabitCalendar
+          habit={calendarHabit}
+          onClose={() => setCalendarHabit(null)}
+        />
       )}
     </div>
   );

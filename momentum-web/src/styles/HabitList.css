@@ -121,17 +121,55 @@
   margin-top: 15px;
 }
 
-.btn-complete {
-  flex: 1;
-  background: #48bb78;
-  color: white;
-  border: none;
+.btn-complete,
+.btn-undo,
+.btn-edit,
+.btn-delete {
   padding: 10px 16px;
+  border: none;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
+}
+
+.btn-complete {
+  flex: 1;
+  background: #48bb78;
+  color: white;
+}
+
+.btn-complete:hover {
+  background: #38a169;
+}
+
+.btn-undo {
+  flex: 1;
+  background: #f59e0b;
+  color: white;
+}
+
+.btn-undo:hover {
+  background: #d97706;
+}
+
+.btn-edit {
+  background: #667eea;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #5568d3;
+}
+
+.btn-delete {
+  background: #f56565;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #e53e3e;
 }
 
 .btn-complete:hover:not(:disabled) {
@@ -145,20 +183,4 @@
 
 .btn-complete:disabled {
   cursor: not-allowed;
-}
-
-.btn-delete {
-  background: #f56565;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-delete:hover {
-  background: #e53e3e;
 }
