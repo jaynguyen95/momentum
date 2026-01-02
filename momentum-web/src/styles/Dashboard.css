@@ -1,0 +1,107 @@
+/* FILE: momentum-web/src/styles/Dashboard.css */
+
+.dashboard-container {
+    min-height: 100vh;
+    background-color: #f7fafc;
+  }
+  
+  .dashboard-nav {
+    background: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .dashboard-nav h2 {
+    margin: 0;
+    font-size: 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .nav-user span {
+    color: #2d3748;
+    font-weight: 500;
+  }
+  
+  .btn-secondary {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #667eea;
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .btn-secondary:hover {
+    background: #667eea;
+    color: white;
+  }
+  
+  .dashboard-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  
+  .welcome-section {
+    background: white;
+    border-radius: 16px;
+    padding: 48px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+  }
+  
+  .welcome-section h1 {
+    font-size: 36px;
+    color: #1a202c;
+    margin: 0 0 16px 0;
+  }
+  
+  .welcome-section > p {
+    font-size: 18px;
+    color: #718096;
+    margin: 0 0 40px 0;
+  }
+  
+  .coming-soon {
+    margin-top: 40px;
+    padding: 32px;
+    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    border-radius: 12px;
+    text-align: left;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .coming-soon h3 {
+    margin: 0 0 20px 0;
+    color: #2d3748;
+    font-size: 20px;
+  }
+  
+  .coming-soon ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .coming-soon li {
+    padding: 12px 0;
+    color: #4a5568;
+    font-size: 16px;
+  }

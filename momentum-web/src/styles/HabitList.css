@@ -1,0 +1,164 @@
+.habit-list {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.habit-list h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.loading, .error, .no-habits {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+}
+
+.error {
+  color: #e53e3e;
+}
+
+.habits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.habit-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+}
+
+.habit-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.habit-card.completed {
+  opacity: 0.6;
+  background: #f9fafb;
+}
+
+.habit-card.completed .habit-header h3 {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.habit-card.completed .habit-description {
+  color: #9ca3af;
+}
+
+.habit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.habit-header h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+  transition: all 0.3s;
+  flex: 1;
+}
+
+.habit-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.habit-streak {
+  background: #fef3c7;
+  color: #f59e0b;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.habit-frequency {
+  background: #f0f4ff;
+  color: #667eea;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.habit-description {
+  color: #666;
+  font-size: 14px;
+  margin: 10px 0;
+  line-height: 1.5;
+  transition: color 0.3s;
+}
+
+.streak-reminder {
+  background: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  padding: 10px 12px;
+  margin: 12px 0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #92400e;
+  font-weight: 600;
+}
+
+.habit-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-complete {
+  flex: 1;
+  background: #48bb78;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-complete:hover:not(:disabled) {
+  background: #38a169;
+}
+
+.btn-complete.completed {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.btn-complete:disabled {
+  cursor: not-allowed;
+}
+
+.btn-delete {
+  background: #f56565;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-delete:hover {
+  background: #e53e3e;
+}
